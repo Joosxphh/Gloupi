@@ -1,5 +1,15 @@
 import {useEffect, useState} from 'react';
-import {View, TextInput, FlatList, Text, Image, Pressable, StyleSheet, SafeAreaView} from 'react-native';
+import {
+    View,
+    TextInput,
+    FlatList,
+    Text,
+    Image,
+    Pressable,
+    StyleSheet,
+    SafeAreaView,
+    TouchableOpacity
+} from 'react-native';
 import {useRouter} from "expo-router";
 import {useMeals} from "../../../context/MealContext";
 import {FontAwesome} from '@expo/vector-icons';
@@ -38,12 +48,19 @@ const AddScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TextInput
                 placeholder="Rechercher des aliments 🍕"
                 value={query}
                 onChangeText={setQuery}
-                style={styles.input}
+                style={styles.inputSearch}
             />
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 10 }}>
+                <TouchableOpacity onPress={() => router.push('/add/camera')}>
+                    <FontAwesome name="barcode" size={24} color="gray" />
+                </TouchableOpacity>
+            </View>
+            </View>
 
             <FlatList
                 data={results}
@@ -171,5 +188,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginVertical: 10,
     },
+
+    inputSearch: {
+        width: 350,
+        borderWidth: 1,
+        borderColor: "gray",
+        borderRadius: 10,
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        marginVertical: 10,
+    }
 
 });
