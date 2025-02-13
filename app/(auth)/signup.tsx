@@ -65,15 +65,18 @@ export default function SignUpScreen() {
 
     if (pendingVerification) {
         return (
-            <>
-                <Text>Verify your email</Text>
+            <View style={styles.container}>
+                <Text style={{ marginBottom: 10, fontSize: 25 }}>Vérifier votre email</Text>
                 <TextInput
+                    style={styles.input}
                     value={code}
-                    placeholder="Enter your verification code"
+                    placeholder="Entrer votre code de verification"
                     onChangeText={(code) => setCode(code)}
                 />
-                <Button title="Verify" onPress={onVerifyPress} />
-            </>
+                <Pressable mode="contained" onPress={onVerifyPress} style={styles.button} title={"vérifier"}>
+                    <Text style={styles.buttonText}>Vérifier</Text>
+                </Pressable>
+            </View>
         )
     }
 
@@ -118,6 +121,15 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonText: {
+        color: 'white',
+        textAlign: 'center',
+    },
+
+    buttonButton: {
+        padding: 10,
+        backgroundColor: 'black',
+        borderRadius: 25,
+        width: '100%',
         color: 'white',
         textAlign: 'center',
     },
