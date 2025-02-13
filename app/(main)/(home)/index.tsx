@@ -1,21 +1,20 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import {Link, useRouter} from 'expo-router'
-import {FlatList, Text, View, Image, Pressable} from 'react-native'
-import { StyleSheet } from 'react-native'
-import {useEffect, useState} from "react";
-import {useMeals} from "../../../context/MealContext";
-
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo';
+import { Link, useRouter } from 'expo-router';
+import { FlatList, Text, View, Image, Pressable, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { useMeals } from '../../../context/MealContext';
+import {FontAwesome} from "@expo/vector-icons";
 
 export default function HomeScreen() {
-    const { meals } = useMeals();
-    const publicKey = process.env.EXPO_PUBLIC_EDAMAM_PUBLIC_KEY!
-    const publicId = process.env.EXPO_PUBLIC_EDAMAM_APP_ID!
+    const { meals, removeMeal } = useMeals();
+    const publicKey = process.env.EXPO_PUBLIC_EDAMAM_PUBLIC_KEY!;
+    const publicId = process.env.EXPO_PUBLIC_EDAMAM_APP_ID!;
     const router = useRouter();
 
     if (!publicKey) {
-        throw new Error('Add EXPO_PUBLIC_EDAMAM_PUBLIC_KEY in your .env')
+        throw new Error('Add EXPO_PUBLIC_EDAMAM_PUBLIC_KEY in your .env');
     }
-
 
     useEffect(() => {
         fetch(`https://api.edamam.com/api/food-database/v2/parser?app_id=${publicId}&app_key=${publicKey}`)
@@ -34,6 +33,9 @@ export default function HomeScreen() {
                                 <View style={styles.cardHeader}>
                                     <Text style={styles.title}>Recette {index + 1}</Text>
                                     <Text>{item.length} ingrédients</Text>
+                                    <Pressable title="Supprimer" onPress={() => removeMeal(index)} >
+                                        <FontAwesome name="trash" size={24} color="black" />
+                                    </Pressable>
                                 </View>
                                 <FlatList
                                     data={item}
@@ -67,7 +69,6 @@ export default function HomeScreen() {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
