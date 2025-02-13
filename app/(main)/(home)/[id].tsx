@@ -1,15 +1,16 @@
 import React from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import {View, Text, FlatList, Image, StyleSheet, Pressable} from 'react-native';
 import { useMeals } from '../../../context/MealContext';
 import {useLocalSearchParams, useRouter} from 'expo-router';
+import {FontAwesome} from "@expo/vector-icons";
 
 export default function MealDetailScreen() {
-    const { meals } = useMeals();
+    const { meals, removeMeal } = useMeals();
     const router = useRouter();
     const { id } = useLocalSearchParams();
     const meal = meals[parseInt(id)];
 
-    const totalNutrients = meal.reduce((acc, ingredient) => {
+    const totalNutrients = meal ? meal.reduce((acc, ingredient) => {
         Object.keys(ingredient.nutrients).forEach((key) => {
             if (!acc[key]) {
                 acc[key] = 0;
@@ -17,11 +18,17 @@ export default function MealDetailScreen() {
             acc[key] += ingredient.nutrients[key];
         });
         return acc;
-    }, {});
+    }, {}) : {};
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Liste des ingrédients</Text>
+            <Pressable style={styles.deleteButton} onPress={() => {
+                removeMeal(parseInt(id));
+                router.push('/');
+            }}>
+                <FontAwesome name="trash" size={24} color="black" />
+            </Pressable>
             <FlatList
                 data={meal}
                 renderItem={({ item }) => (
@@ -101,4 +108,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'gray',
     },
+
+    deleteButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+},
 });
